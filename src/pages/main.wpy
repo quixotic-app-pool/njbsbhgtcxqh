@@ -1,0 +1,81 @@
+<style lang="less">
+.zm-main-item {
+  display: flex;
+  flex-direction: row;
+  margin:10px;
+  background-color: white;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+  border-radius:300px;
+  border: 1px solid #e6ebf5;
+  text {
+    font-size: 12px;
+  }
+}
+.zm-text {
+  padding: 1px 2px;
+  border-radius: 5px;
+  margin-right: 10px;
+  color: white;
+}
+</style>
+<template>
+  <view class="container">
+    <scroll-view scroll-y style="background-color: rgb(240, 240, 240); height: 100%; width: 100%;" bindscrolltoupper="upper" bindscrolltolower="lower" bindscroll="scroll" scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
+      <view class="zm-main-item" wx:for="{{list}}" wx:key="{{ idx }}" wx:for-index="idx" wx:for-item="item">
+        <image style="flex:1; width: 100%;" mode="aspectFill" src="{{item.img}}"></image>
+        <view style="box-shadow:inset 0 2px 12px 0 rgba(0,0,0,.1);border-radius:0 300px 300px 0;flex:1; display:flex; flex-direction:column; justify-content:center; padding: 10px; flex-wrap: wrap">
+          <view >
+            <text style="display:block; font-size: 30px;">{{item.name}}</text>
+            <view>
+              <text class="zm-text" style="background-color: #00fa9a">{{item.age}}</text>
+              <text class="zm-text" style="background-color: #ff0000">{{item.gender}}</text>
+            </view>
+            <view>
+              <text class="zm-text" style="background-color:#ffd700">{{item.height}}cm</text>
+              <text class="zm-text" style="background-color:#c465e5">{{item.degree}}</text>
+              <text class="zm-text" style="background-color:#f4684d">{{item.weight}}Kg</text>
+              <text class="zm-text" style="background-color:#5fcdee">{{item.industry}}</text>
+              <text class="zm-text" style="background-color:#ffcfcf">{{item.position}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+  export default class Main extends wepy.page {
+    config = {
+      navigationBarTitleText: '南京本硕博海归相亲会'
+    };
+    data = {
+      gender: ['男生', '女生'],
+      array: ['未婚', '离异'],
+      array2: ['本科以上', '硕士以上', '博士以上', '海归派'],
+      toView: 'red',
+      scrollTop: 100,
+      list: [{name: '爱因斯坦', age: '25', gender: '男生', height: '175', degree: '本科', weight: '68', industry: '互联网', position: '前端程序员', img: './einstain.jpeg'}, {name: '爱因斯坦', age: '25', gender: '男生', height: '175', degree: '本科', weight: '68', industry: '互联网', position: '前端程序员', img: './einstain.jpeg'}, {name: '爱因斯坦', age: '25', gender: '男生', height: '175', degree: '本科', weight: '68', industry: '互联网', position: '前端程序员', img: './einstain.jpeg'}, {name: '爱因斯坦', age: '25', gender: '男生', height: '175', degree: '本科', weight: '68', industry: '互联网', position: '前端程序员', img: './einstain.jpeg'}, {name: '爱因斯坦', age: '25', gender: '男生', height: '175', degree: '本科', weight: '68', industry: '互联网', position: '前端程序员', img: './einstain.jpeg'}, {name: '爱因斯坦', age: '25', gender: '男生', height: '175', degree: '本科', weight: '68', industry: '互联网', position: '前端程序员', img: './einstain.jpeg'}]
+    };
+    methods = {
+      radioChange () {
+
+      },
+      bindPickerChange () {
+
+      },
+      upper: function(e) {
+        // console.log(e)
+      },
+      lower: function(e) {
+        // console.log(e)
+      },
+      scroll: function(e) {
+        // console.log(e)
+      }
+    }
+  }
+</script>

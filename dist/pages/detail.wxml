@@ -1,0 +1,44 @@
+
+  <view class="container zm-detail-container">
+    <view style="width: 100%;box-shadow:inset 0 2px 12px 0 rgba(0,0,0,.1); border-radius: 10px 10px 0 0;">
+      <swiper vertical="true" indicator-active-color="rgb(250, 150, 161)" circular="true" indicator-dots="false" autoplay="true" interval="10000" duration="1000">
+        <block  wx:for="{{box.imgUrls}}" wx:key="index" wx:for-index="index">
+          <swiper-item>
+            <image src="{{item}}" style="width: {{sysWidth}}px;" mode="aspectFit"/>
+          </swiper-item>
+        </block>
+      </swiper>
+    </view>
+
+    <view class="column_center" style="box-shadow:inset 0 2px 12px 0 rgba(0,0,0,.1);width:100%;padding-bottom:20px;border-bottom:1px solid #eee;">
+
+      <text style="font-size:30px; padding: 20px 0;font-weight:700;">{{box.name}}</text>
+      <view class="row_center">
+        <image style="height:20px; width: 20px; padding-right: 20px;" src="../img/male.png" alt=""/>
+        <text>25</text>
+      </view>
+    </view>
+
+    <view class="column_center" style="box-shadow:inset 0 2px 12px 0 rgba(0,0,0,.1);padding: 0 10px;border-bottom:1px solid #eee;">
+      <text style="align-self: flex-start;font-weight:700;top:16px;position:relative;font-size:22px;">自我介绍: </text>
+      <text style="text-align: justify; line-height:24px; padding-bottom: 20px;font-size:17px;opacity: 0.5">
+        {{box.seflintro}}
+      </text>
+    </view>
+
+    <view style="padding:44px; display:flex; flex-direction:row; flex-wrap: wrap;box-shadow:inset 0 2px 12px 0 rgba(0,0,0,.1);border-radius:0 0 10px 10px;">
+      <text class="zm-text" style="background-color: #00fa9a">{{box.marriage}}</text>
+      <text class="zm-text" style="background-color: #ff0000">{{box.height}} cm</text>
+      <text class="zm-text" style="background-color:#ffd700">{{box.weight}}Kg</text>
+      <text class="zm-text" style="background-color:#c465e5">{{box.degree}}</text>
+      <text  wx:if="{{box.shihaigui}}" class="zm-text" style="background-color:#f4684d">海归派</text>
+      <text class="zm-text" style="background-color:#5fcdee">{{box.college}}</text>
+      <text class="zm-text" style="background-color:#ffcfcf">{{box.major}}</text>
+      <text class="zm-text" style="background-color:#00008b">月收入{{box.salary}}</text>
+      <text wx:if="{{box.youfangzi}}" class="zm-text" style="background-color:#7eb4a9">有房产</text>
+      <text class="zm-text" style="background-color:#d0c5c5">{{box.hometown}}户口</text>
+      <text class="zm-text" style="background-color:#b9ffed">{{box.industry}}行业</text>
+      <text class="zm-text" style="background-color:#f4684d">{{box.companytype}}</text>
+    </view>
+
+  </view>

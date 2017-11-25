@@ -1,0 +1,139 @@
+
+  <view class="container">
+
+    <view>
+      <input placeholder="输入你的邀请码..." auto-focus/>
+
+      <view>
+        <text>请自行留下一个输入指令方便下次修改资料</text>
+        <input placeholder="在这里输入..." auto-focus/>
+      </view>
+    </view>
+
+    <view>
+      <view>
+        <text>请详细填写你的资料，标记部分为必填</text>
+      </view>
+
+      <view>
+        <view>
+          <text>请上传一到三张免冠照（必选）</text>
+          <view class="image-list">
+            <!-- preview the image which already be choosed -->
+            <view class="choosed-image-list"  wx:for="{{ images }}" wx:for-item="image" wx:for-index="idx" wx:key="{{ idx }}">
+              <image src="{{ image }}" mode="aspectFill" catchtap="previewImage" class="choosed-image" data-wpypreviewimage-a="{{ image }}" data-wpypreviewimage-b="{{ images }}"/>
+              <view class="choosed-image-delete-btn" catchtap="deleteImage" data-wpydeleteimage-a="{{ idx }}">
+                <image class="choosed-image-delete-btn-icon" src="../img/delete.svg"/>
+              </view>
+            </view>
+            <!-- image choosing btn -->
+            <view class="choose-image-btn"  wx:if="{{ images.length < 9 }}" bindtap="chooseImage">
+              <image class="choose-image-btn-icon" src="../img/choose-image.svg">
+              </image>
+            </view>
+          </view>
+        </view>
+
+        <view>
+          <text>昵称：</text>
+          <input placeholder="..."/>
+        </view>
+
+        <view>
+          <text>请做一个自我介绍: </text>
+          <textarea bindblur="bindTextAreaBlur" auto-height placeholder="自动变高"/>
+        </view>
+
+        <view>
+          <text>性别</text>
+          <radio-group class="radio-group" bindchange="radioChange">
+            <label class="radio" wx:for="{{gender}}" wx:key="{{ idx }}" wx:for-index="idx">
+              <radio value="{{item}}" checked="{{item.checked}}"/>{{item.value}}
+            </label>
+          </radio-group>
+        </view>
+
+        <view>
+          <text>年龄</text>
+          <input placeholder="直接输入年龄..."/>
+        </view>
+
+        <view>
+          <!-- <view class="">婚姻状态</view> -->
+          <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
+            <view class="picker">
+              婚姻状态：{{array[index]}}
+            </view>
+          </picker>
+        </view>
+
+        <view>
+          <text>身高</text>
+          <input placeholder="单位为cm..."/>
+        </view>
+
+        <view>
+          <text>体重</text>
+          <input placeholder="单位为kg..."/>
+        </view>
+
+        <view>
+          <!-- <view class="">婚姻状态</view> -->
+          <picker bindchange="bindPickerChange" value="{{index}}" range="{{array2}}">
+            <view class="picker">
+              学历{{array2[index]}}
+            </view>
+          </picker>
+          <view>
+            <text>海归派</text>
+            <checkbox value="{{haigui}}" checked="true"/>{{item.value}}
+          </view>
+          <view>
+            <text>毕业院校</text>
+            <input placeholder="若多个可以加逗号分别列出..."/>
+          </view>
+          <view>
+            <text>专业</text>
+            <input placeholder="若多个可以加逗号分别列出..."/>
+          </view>
+        </view>
+
+        <view>
+          <text>工作城市（只限南京）</text>
+          <input placeholder="南京" disabled/>
+        </view>
+
+        <view>
+          <picker bindchange="bindPickerChange" value="{{index}}" range="{{array2}}">
+            <view class="picker">
+              薪水{{xinshui[index]}}
+            </view>
+          </picker>
+        </view>
+
+        <view>
+          <text>是否有房产</text>
+          <checkbox value="{{haigui}}" checked="true"/>{{item.value}}
+        </view>
+
+        <view>
+          <text>户口</text>
+          <input placeholder="比如南京..."/>
+        </view>
+
+        <view>
+          <text>从事行业</text>
+          <input placeholder="比如互联网..."/>
+        </view>
+
+        <view>
+          <text>公司类型</text>
+          <input placeholder="比如机关单位..."/>
+        </view>
+
+    </view>
+
+    </view>
+
+    <button type="button" name="button">确定上传</button>
+  </view>
