@@ -1,11 +1,19 @@
 
   <view class="container">
-    <scroll-view scroll-y style="background-color: rgb(240, 240, 240); height: 100%; width: 100%;" bindscrolltoupper="upper" bindscrolltolower="lower" bindscroll="scroll" scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
-      <view class="zm-main-item"  wx:for="{{list}}" wx:key="{{ idx }}" wx:for-index="idx" wx:for-item="item">
-        <image style="flex:1; width: 100%;" mode="aspectFill" src="{{item.img}}"/>
-        <view style="box-shadow:inset 0 2px 12px 0 rgba(0,0,0,.1);border-radius:0 300px 300px 0;flex:1; display:flex; flex-direction:column; justify-content:center; padding: 10px; flex-wrap: wrap">
+    <view bindtap="filter" class="floatingBtn"><text>{{filterStatus}}</text></view>
+    <view  wx:if="!uploaded" bindtap="goEdit" class="floatingBtn secondBtn"><text>上传</text></view>
+    <scroll-view scroll-y class="heartbeating " style="background-color: rgb(240, 240, 240); height: {{sysHeight}}px; width: 100%;" bindscrolltoupper="upper" bindscrolltolower="lower" bindscroll="scroll" scroll-into-view="{{toView}}" enable-back-to-top="true" scroll-top="{{scrollTop}}">
+      <view bindtap="navigateToDetail" class="zm-main-item"  wx:for="{{list}}" wx:key="{{ idx }}" wx:for-index="idx" wx:for-item="item" data-wpynavigatetodetail-a="{{item._id}}">
+        <image style="flex:1; width: 100%;padding:10px;box-sizing:border-box;" mode="aspectFill" src="/Users/mymac/Desktop/miniprogram/backend/njbsbhgtcdsxqh_server/route/../imageuploaded/1511688530438.jpg"/>
+        <view style="border-radius:0 300px 300px 0;flex:1; display:flex; flex-direction:column; justify-content:center; padding: 10px; flex-wrap: wrap">
           <view>
-            <text style="display:block; font-size: 30px;">{{item.name}}</text>
+              <view class="navigating">
+                <image style="height: 30px; width: 30px; left:60px; position:relative;" src="../img/right.png"/>
+                <image style="height: 30px; width: 30px; left:40px; position:relative;" src="../img/right.png"/>
+                <image style="height: 30px; width: 30px; left:20px; position:relative;" src="../img/right.png"/>
+              </view>
+
+            <text style="display:block; font-size: 30px;">{{item.nickname}}</text>
             <view>
               <text class="zm-text" style="background-color: #00fa9a">{{item.age}}</text>
               <text class="zm-text" style="background-color: #ff0000">{{item.gender}}</text>
@@ -14,8 +22,7 @@
               <text class="zm-text" style="background-color:#ffd700">{{item.height}}cm</text>
               <text class="zm-text" style="background-color:#c465e5">{{item.degree}}</text>
               <text class="zm-text" style="background-color:#f4684d">{{item.weight}}Kg</text>
-              <text class="zm-text" style="background-color:#5fcdee">{{item.industry}}</text>
-              <text class="zm-text" style="background-color:#ffcfcf">{{item.position}}</text>
+              <text wx:if="{{item.industry !== undefined && item.industry.length !== 0}}" class="zm-text" style="background-color:#5fcdee">{{item.industry}}</text>
             </view>
           </view>
         </view>

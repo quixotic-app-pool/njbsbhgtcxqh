@@ -5,7 +5,8 @@
   margin:10px;
   background-color: white;
   box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
-  border-radius:300px;
+  border-radius:10px 300px 300px 10px;
+  box-shadow:inset 0 2px 12px 0 rgba(0,0,0,.1);
   border: 1px solid #e6ebf5;
   text {
     font-size: 12px;
@@ -17,15 +18,66 @@
   margin-right: 10px;
   color: white;
 }
+.heartbeating {
+  animation: pulse 3s ease infinite alternate;
+}
+
+@keyframes pulse {
+  0% {
+    background-color: white;
+  }
+  100% {
+    background-color: #f9444d;
+  }
+}
+.navigating {
+  animation: move 1s linear 4 alternate;
+}
+@keyframes move {
+  0% {
+    transform: translate(0 , 0);
+  }
+  100% {
+    transform: translate(30px , 0);
+  }
+}
+.floatingBtn {
+  position: fixed;
+  right: 20px;
+  bottom: 50px;
+  width: 60px;
+  height: 60px;
+  background: #FA6570;
+  border-radius: 50%;
+  text-align: center;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.4);
+  transition: all 150ms ease;
+  z-index: 100;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:white;
+}
+.secondBtn {
+  bottom: 120px;
+}
 </style>
 <template>
   <view class="container">
-    <scroll-view scroll-y style="background-color: rgb(240, 240, 240); height: 100%; width: 100%;" bindscrolltoupper="upper" bindscrolltolower="lower" bindscroll="scroll" scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
-      <view class="zm-main-item" wx:for="{{list}}" wx:key="{{ idx }}" wx:for-index="idx" wx:for-item="item">
-        <image style="flex:1; width: 100%;" mode="aspectFill" src="{{item.img}}"></image>
-        <view style="box-shadow:inset 0 2px 12px 0 rgba(0,0,0,.1);border-radius:0 300px 300px 0;flex:1; display:flex; flex-direction:column; justify-content:center; padding: 10px; flex-wrap: wrap">
+    <view bindtap="filter" class="floatingBtn"><text>{{filterStatus}}</text></view>
+    <view wx:if="!uploaded" bindtap="goEdit" class="floatingBtn secondBtn"><text>上传</text></view>
+    <scroll-view scroll-y class="heartbeating " style="background-color: rgb(240, 240, 240); height: {{sysHeight}}px; width: 100%;" bindscrolltoupper="upper" bindscrolltolower="lower" bindscroll="scroll" scroll-into-view="{{toView}}" enable-back-to-top='true' scroll-top="{{scrollTop}}">
+      <view bindtap="navigateToDetail({{item._id}})" class="zm-main-item" wx:for="{{list}}" wx:key="{{ idx }}" wx:for-index="idx" wx:for-item="item">
+        <image style="flex:1; width: 100%;padding:10px;box-sizing:border-box;" mode="aspectFill" src="/Users/mymac/Desktop/miniprogram/backend/njbsbhgtcdsxqh_server/route/../imageuploaded/1511688530438.jpg"></image>
+        <view style="border-radius:0 300px 300px 0;flex:1; display:flex; flex-direction:column; justify-content:center; padding: 10px; flex-wrap: wrap">
           <view >
-            <text style="display:block; font-size: 30px;">{{item.name}}</text>
+              <view class="navigating">
+                <image style="height: 30px; width: 30px; left:60px; position:relative;"  src="../img/right.png"></image>
+                <image style="height: 30px; width: 30px; left:40px; position:relative;"  src="../img/right.png"></image>
+                <image style="height: 30px; width: 30px; left:20px; position:relative;"  src="../img/right.png"></image>
+              </view>
+
+            <text style="display:block; font-size: 30px;">{{item.nickname}}</text>
             <view>
               <text class="zm-text" style="background-color: #00fa9a">{{item.age}}</text>
               <text class="zm-text" style="background-color: #ff0000">{{item.gender}}</text>
@@ -34,8 +86,7 @@
               <text class="zm-text" style="background-color:#ffd700">{{item.height}}cm</text>
               <text class="zm-text" style="background-color:#c465e5">{{item.degree}}</text>
               <text class="zm-text" style="background-color:#f4684d">{{item.weight}}Kg</text>
-              <text class="zm-text" style="background-color:#5fcdee">{{item.industry}}</text>
-              <text class="zm-text" style="background-color:#ffcfcf">{{item.position}}</text>
+              <text wx:if="{{item.industry !== undefined && item.industry.length !== 0}}" class="zm-text" style="background-color:#5fcdee">{{item.industry}}</text>
             </view>
           </view>
         </view>
@@ -47,34 +98,96 @@
 
 <script>
   import wepy from 'wepy'
+  import api from './../api/api'
 
   export default class Main extends wepy.page {
     config = {
       navigationBarTitleText: '南京本硕博海归相亲会'
     };
     data = {
+      page: 0,
+      sysHeight: wepy.getSystemInfoSync().windowHeight,
+      filterStatus: '女生',
+      uploaded: false,
       gender: ['男生', '女生'],
-      array: ['未婚', '离异'],
-      array2: ['本科以上', '硕士以上', '博士以上', '海归派'],
       toView: 'red',
       scrollTop: 100,
-      list: [{name: '爱因斯坦', age: '25', gender: '男生', height: '175', degree: '本科', weight: '68', industry: '互联网', position: '前端程序员', img: './einstain.jpeg'}, {name: '爱因斯坦', age: '25', gender: '男生', height: '175', degree: '本科', weight: '68', industry: '互联网', position: '前端程序员', img: './einstain.jpeg'}, {name: '爱因斯坦', age: '25', gender: '男生', height: '175', degree: '本科', weight: '68', industry: '互联网', position: '前端程序员', img: './einstain.jpeg'}, {name: '爱因斯坦', age: '25', gender: '男生', height: '175', degree: '本科', weight: '68', industry: '互联网', position: '前端程序员', img: './einstain.jpeg'}, {name: '爱因斯坦', age: '25', gender: '男生', height: '175', degree: '本科', weight: '68', industry: '互联网', position: '前端程序员', img: './einstain.jpeg'}, {name: '爱因斯坦', age: '25', gender: '男生', height: '175', degree: '本科', weight: '68', industry: '互联网', position: '前端程序员', img: './einstain.jpeg'}]
+      list: []
+    };
+    async onLoad () {
+      this.uploaded = wepy.getStorageSync('_uploaded')
+      var genderPreference = wepy.getStorageSync('_genderPreference')
+      if (genderPreference === '女生') {
+        this.filterStatus = '男生'
+      } else {
+        this.filterStatus = '女生'
+      }
+      this.page = 0
+      await this.requestList(genderPreference)
+    };
+    async requestList (genderPreference) {
+      var self = this
+      var res = await api.getlist({
+        query: {
+          genderpreference: genderPreference,
+          page: self.page
+        }
+      })
+      // console.log('request list get result from server: ' + JSON.stringify(res))
+      if (res.data) {
+        self.page ++
+        if (self.list.length === 0) {
+          self.list = res.data
+        } else {
+          self.list.push(...res.data)
+        }
+        self.$apply()
+      } else {
+        wepy.showModal({
+          title: '提示',
+          content: '发生异常，请重新尝试。',
+          showCancel: false
+        })
+      }
     };
     methods = {
+      async filter () {
+        this.page = 0
+        this.list = []
+        await this.requestList(this.filterStatus)
+        wepy.setStorageSync('_genderPreference', this.filterStatus)
+        if (this.filterStatus === '女生') {
+          this.filterStatus = '男生'
+        } else {
+          this.filterStatus = '女生'
+        }
+      },
+      navigateToDetail (id) {
+        var _id = id
+        wepy.navigateTo({
+          url: 'detail?_id=' + _id
+        })
+      },
       radioChange () {
 
       },
       bindPickerChange () {
 
       },
-      upper: function(e) {
+      upper (e) {
         // console.log(e)
       },
-      lower: function(e) {
+      async lower () {
+        var genderPreference = wepy.getStorageSync('_genderPreference')
+        await this.requestList(genderPreference)
+      },
+      scroll (e) {
         // console.log(e)
       },
-      scroll: function(e) {
-        // console.log(e)
+      goEdit () {
+        wepy.navigateTo({
+          url: 'edit'
+        })
       }
     }
   }

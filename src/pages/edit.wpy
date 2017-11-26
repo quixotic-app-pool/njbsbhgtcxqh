@@ -1,5 +1,12 @@
 <style lang="less">
+.zm-input {
+  border: 1px solid rgb(240, 240, 240);
+  border-radius: 4px;
+}
 .image-list {
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
     padding: 15px;
     padding-top: 0;
     width: 100%;
@@ -45,27 +52,50 @@
       }
     }
   }
+  .zm-invite {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 50px 0;
+    text {
+      padding-bottom:10px; font-weight: 700;
+    }
+    button {
+      margin-top:10px;
+    }
+  }
+  .zm-edit-container {
+    margin: 10px;
+    height: 100%;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+    border: 1px solid #e6ebf5;
+    border-radius: 10px;
+    box-shadow:inset 0 2px 12px 0 rgba(0,0,0,.1);
+  }
+  .green {
+    color: green;
+  }
 </style>
 <template>
-  <view class="container">
+  <view class="container zm-edit-container" style="padding: 20px;">
 
-    <view>
-      <input placeholder="输入你的邀请码..." auto-focus/>
-
-      <view>
-        <text>请自行留下一个输入指令方便下次修改资料</text>
-        <input placeholder="在这里输入..." auto-focus/>
+    <view wx:if="{{!accessible}}">
+      <view class="zm-invite" wx:if="{{!accessible}}">
+        <text style="">请输入你的邀请码</text>
+        <input bindinput="editinvite" class="zm-input" placeholder="欢迎你..." auto-focus/>
+        <button bindtap="inviteGuest" style="" type="primary" name="button">确定</button>
       </view>
     </view>
 
-    <view>
-      <view>
-        <text>请详细填写你的资料，标记部分为必填</text>
+    <view wx:if="{{accessible}}">
+      <view style="padding: 20px; text-align:center; display: flex; flex-direction:column; ">
+        <text style="font-size: 30px;font-weight:700;color: #c0ae7d">请详细填写资料</text>
+        <text style="font-size: 12px; color: green; opacity: 0.5;">(绿色部分为必填)</text>
       </view>
 
       <view>
         <view>
-          <text>请上传一到三张免冠照（必选）</text>
+          <text class="green">请上传一到三张免冠照</text>
           <view class="image-list">
             <!-- preview the image which already be choosed -->
             <view
@@ -90,7 +120,7 @@
             <!-- image choosing btn -->
             <view
               class="choose-image-btn"
-              wx:if="{{ images.length < 9 }}"
+              wx:if="{{ images.length < 3 }}"
               bindtap="chooseImage">
               <image
                 class="choose-image-btn-icon"
@@ -100,126 +130,414 @@
           </view>
         </view>
 
-        <view>
-          <text>昵称：</text>
-          <input placeholder="..."/>
+        <view style="display: flex; padding-bottom:10px;">
+          <text class="green">昵称：</text>
+          <input bindinput="editnickname" class="zm-input" placeholder="在这里认识朋友..."/>
         </view>
 
         <view>
-          <text>请做一个自我介绍: </text>
-          <textarea bindblur="bindTextAreaBlur" auto-height placeholder="自动变高" />
+          <text style="">请做一个自我介绍: </text>
+          <textarea bindinput="editselfintro" class="zm-input" style="height: 100px;margin-top:10px;" bindblur="bindTextAreaBlur" placeholder="相遇相知..." />
         </view>
 
-        <view>
-          <text>性别</text>
-          <radio-group class="radio-group" bindchange="radioChange">
+        <view style="padding: 10px 0;">
+          <text class="green">性别:</text>
+          <radio-group style="padding-top:10px;" bindchange="editgender">
             <label class="radio" wx:for="{{gender}}" wx:key="{{ idx }}" wx:for-index="idx">
-              <radio value="{{item}}" checked="{{item.checked}}"/>{{item.value}}
+              <radio value="{{item}}" checked="{{item.checked}}"/>{{item}}
             </label>
           </radio-group>
         </view>
 
-        <view>
-          <text>年龄</text>
-          <input placeholder="直接输入年龄..."/>
+        <view style="display: flex; padding-bottom:10px;">
+          <text class="green">年龄：</text>
+          <input class="zm-input" bindinput="editage" type="number" placeholder="找到喜欢的人..."/>
         </view>
 
-        <view>
+        <view style="padding-bottom:10px;">
           <!-- <view class="">婚姻状态</view> -->
-          <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
+          <picker bindchange="editMarriageStatus" value="{{marriageStatusIndex}}" range="{{marriageStatusRange}}">
             <view class="picker">
-              婚姻状态：{{array[index]}}
+              <text class="green">婚姻状态：</text>{{marriageStatusRange[marriageStatusIndex]}}
             </view>
           </picker>
         </view>
 
-        <view>
-          <text>身高</text>
-          <input placeholder="单位为cm..."/>
+        <view style="display: flex; padding-bottom:10px;">
+          <text class="green">身高(cm)：</text>
+          <input class="zm-input" bindinput="editheight" type="number" placeholder="一生一世..."/>
         </view>
 
-        <view>
-          <text>体重</text>
-          <input placeholder="单位为kg..."/>
+        <view style="display: flex; padding-bottom:10px;">
+          <text>体重(Kg)：</text>
+          <input class="zm-input" bindinput="editweight" type="number" placeholder="人生百年..."/>
         </view>
 
-        <view>
+        <view style="padding-bottom:10px;">
           <!-- <view class="">婚姻状态</view> -->
-          <picker bindchange="bindPickerChange" value="{{index}}" range="{{array2}}">
+          <picker style="padding-bottom:10px;" bindchange="degreeChoose" value="{{degreeIndex}}" range="{{degreeRange}}">
             <view class="picker">
-              学历{{array2[index]}}
+              <text class="green">学历：</text>{{degreeRange[degreeIndex]}}
             </view>
           </picker>
-          <view>
-            <text>海归派</text>
-            <checkbox value="{{haigui}}" checked="true"/>{{item.value}}
+          <view style="padding-bottom:10px;">
+            <text>海归派：</text>
+            <checkbox bindtap="edithaigui"/>
           </view>
-          <view>
-            <text>毕业院校</text>
-            <input placeholder="若多个可以加逗号分别列出..."/>
+          <view style="padding-bottom:10px;">
+            <text>毕业院校：</text>
+            <input class="zm-input" bindinput="editcollege" style="margin-top: 5px;" placeholder="莫不如此为最美..."/>
           </view>
-          <view>
-            <text>专业</text>
-            <input placeholder="若多个可以加逗号分别列出..."/>
+          <view style="">
+            <text>专业：</text>
+            <input class="zm-input" bindinput="editmajor" style="margin-top: 5px;" placeholder="若多个可以加逗号分别列出..."/>
           </view>
         </view>
 
-        <view>
-          <text>工作城市（只限南京）</text>
+        <view style="padding-bottom:10px;">
+          <text>工作/学习城市（只限南京）</text>
           <input placeholder="南京" disabled/>
         </view>
 
-        <view>
-          <picker bindchange="bindPickerChange" value="{{index}}" range="{{array2}}">
+        <view style="padding-bottom:10px;">
+          <picker bindchange="editSalary" value="{{salaryIndex}}" range="{{salaryRange}}">
             <view class="picker">
-              薪水{{xinshui[index]}}
+              薪水：{{salaryRange[salaryIndex]}}
             </view>
           </picker>
         </view>
 
-        <view>
-          <text>是否有房产</text>
-          <checkbox value="{{haigui}}" checked="true"/>{{item.value}}
+        <view style="display: flex; padding-bottom:10px;">
+          <text>是否有房：</text>
+          <checkbox bindtap="edityoufang"/>
         </view>
 
-        <view>
-          <text>户口</text>
-          <input placeholder="比如南京..."/>
+        <view style="display: flex; padding-bottom:10px;">
+          <text>户口：</text>
+          <input class="zm-input" bindchange="edithometown" placeholder="比如南京..."/>
         </view>
 
-        <view>
-          <text>从事行业</text>
-          <input placeholder="比如互联网..."/>
+        <view style="display: flex; padding-bottom:10px;">
+          <text>从事行业：</text>
+          <input class="zm-input" bindchange="editindustry" placeholder="比如互联网..."/>
         </view>
 
-        <view>
-          <text>公司类型</text>
-          <input placeholder="比如机关单位..."/>
+        <view style="display: flex; padding-bottom:10px;">
+          <text>公司类型：</text>
+          <input class="zm-input" bindchange="editcompanytype" placeholder="比如机关单位..."/>
         </view>
 
     </view>
-
+      <button style="margin: 10px 0;" bindtap="send" type="primary" name="button">确定上传</button>
     </view>
-
-    <button type="button" name="button">确定上传</button>
   </view>
 </template>
 
 <script>
   import wepy from 'wepy'
+  import api from './../api/api'
 
   export default class Edit extends wepy.page {
     config = {
       navigationBarTitleText: '编辑'
     };
     data = {
+      invitecode: '',
+      marriageStatusIndex: 0,
+      degreeIndex: 0,
+      salaryIndex: 0,
+      genderValue: '',
+      accessible: true,
+      selfintro: '',
+      age: 0,
+      height: 0,
+      weight: 0,
+      gender: ['女生', '男生'],
       images: [],
-      array: ['未婚', '离异'],
-      array2: ['本科', '硕士', '博士'],
+      nickname: '',
+      college: '',
+      major: '',
+      shihaigui: false,
+      youfang: false,
+      hometown: '',
+      industry: '',
+      companytype: '',
+      marriageStatusRange: ['未选择', '未婚', '离异'],
+      degreeRange: ['未选择', '本科', '硕士', '博士'],
       haigui: false,
-      xinshui: ['2 ~ 5K', '5 ~ 10K', '10 ~ 20K', '20 ~ 50K', '50K以上']
+      salaryRange: ['未选择', '在读', '2 ~ 5K', '5 ~ 10K', '10 ~ 20K', '20 ~ 50K', '50K以上']
     };
     methods = {
+      async send () {
+        var self = this
+        // 检查必填项
+        if (self.nickname.length > 0 && self.gender.length > 0 && self.degreeIndex !== 0 && self.height.length > 0 && self.marriageStatusIndex !== 0 && self.age.length > 0) {
+          wepy.showModal({
+            title: '提示',
+            content: '确定上传吗？只此一次上传机会额，因为群主有点忙，暂时没有修改的功能的呢。修改暂时只能找泽铭从后台完成😜。'
+          }).then(async function (res) {
+            if (res.confirm) {
+              console.log(self)
+                // imgUrls: []
+
+              var imgUrls = []
+                // upload images
+              if (self.images.length > 0) {
+                try {
+                  for (let v of self.images) {
+                    const r = await wepy.uploadFile({
+                      url: 'http://127.0.0.1:9000/api/upload/image',
+                      filePath: v,
+                      name: 'file',
+                      success: function(res) {
+                        console.log('image has been successfully saved in server. Congrats!')
+                      }
+                    })
+
+                    r.data = JSON.parse(r.data)
+                    if (r.data.img) {
+                      imgUrls.push(r.data.img)
+                    } else {
+                      wepy.hideToast()
+                      wepy.showModal({
+                        title: '提示',
+                        content: '服务器错误，上传图片失败。请重试~：）' + r.data.errmsg,
+                        showCancel: false
+                      })
+                    }
+                  }
+                } catch (e) {
+                  wepy.hideToast()
+                  wepy.showModal({
+                    title: '提示',
+                    content: '服务器错误，上传图片失败。' + e.message,
+                    showCancel: false
+                  })
+                  return
+                }
+              }
+
+              // update portfolio
+              var pack = {
+                invitecode: self.invitecode,
+                imgUrls: imgUrls,
+                nickname: self.nickname,
+                selfintro: self.selfintro,
+                gender: self.genderValue,
+                age: self.age,
+                marriagestatus: self.marriageStatusRange[self.marriageStatusIndex],
+                height: self.height,
+                weight: self.weight,
+                degree: self.degreeRange[self.degreeIndex],
+                shihaigui: self.shihaigui,
+                college: self.college,
+                major: self.major,
+                city: '南京',
+                salary: self.salaryRange[self.salaryIndex],
+                youfang: self.youfang,
+                hometown: self.hometown,
+                industry: self.industry,
+                companytype: self.companytype
+              }
+
+              try {
+                const res = await api.newportfolio({
+                  query: {
+                    pack: pack
+                  },
+                  method: 'POST'
+                })
+                // console.log('data back from new blog: ' + JSON.stringify(res))
+                wepy.hideToast()
+                if (res.data.success) {
+                  await wepy.showToast({
+                    title: '发送成功！',
+                    icon: 'success',
+                    duration: 1500,
+                    mask: true
+                  })
+                  wepy.setStorageSync('_uploaded', true)
+                } else {
+                  wepy.showModal({
+                    title: '提示',
+                    content: '抱歉，服务器发生异常，请联系泽铭: takeiteasydude',
+                    showCancel: false
+                  })
+                }
+
+                wepy.navigateTo({
+                  url: 'main'
+                })
+              } catch (e) {
+                wepy.hideToast()
+                wepy.showModal({
+                  title: '提示',
+                  content: '抱歉，服务器发生异常，请联系泽铭: takeiteasydude。',
+                  showCancel: false
+                })
+                return e
+              }
+            }
+          })
+        } else {
+          wepy.showModal({
+            title: '提示',
+            content: '请把绿色提示必填的内容补齐额^_^...'
+          })
+        }
+      },
+      edityoufang (e) {
+        this.youfang = !this.youfang
+      },
+      edithaigui (e) {
+        this.shihaigui = !this.shihaigui
+      },
+      editgender (e) {
+        this.genderValue = e.detail.value
+      },
+      editcompanytype (e) {
+        this.companytype = e.detail.value
+      },
+      editindustry (e) {
+        this.industry = e.detail.value
+      },
+      edithometown (e) {
+        this.hometown = e.detail.value
+      },
+      editmajor (e) {
+        this.major = e.detail.value
+      },
+      editcollege (e) {
+        this.college = e.detail.value
+      },
+      editweight (e) {
+        var temp = e.detail.value
+        if (temp.length > 3) {
+          wepy.showModal({
+            title: '提示',
+            content: 'Are you kidding me... 别以为泽铭不知道，哼！'
+          })
+        } else {
+          if (isNaN(temp)) {
+            wepy.showModal({
+              title: '提示',
+              content: '请输入数字...'
+            })
+          } else {
+            this.weight = e.detail.value
+          }
+        }
+      },
+      editheight (e) {
+        var temp = e.detail.value
+        if (temp.length > 3) {
+          wepy.showModal({
+            title: '提示',
+            content: 'Are you kidding me... 别以为泽铭不知道，哼！'
+          })
+        } else {
+          if (isNaN(temp)) {
+            wepy.showModal({
+              title: '提示',
+              content: '请输入数字...'
+            })
+          } else {
+            this.height = e.detail.value
+          }
+        }
+      },
+      editage (e) {
+        var temp = e.detail.value
+
+        if (temp.length > 2) {
+          wepy.showModal({
+            title: '提示',
+            content: 'Are you kidding me... 别以为泽铭不知道，哼！'
+          })
+        } else {
+          if (isNaN(temp)) {
+            wepy.showModal({
+              title: '提示',
+              content: '请输入数字...'
+            })
+          } else {
+            this.age = e.detail.value
+          }
+        }
+      },
+      editselfintro (e) {
+        if (e.detail.value.length < 120) {
+          this.selfintro = e.detail.value
+        } else {
+          wepy.showModal({
+            title: '提示',
+            content: '你已超出字数范围...'
+          })
+        }
+      },
+      editnickname (e) {
+        if (e.detail.value.length < 10) {
+          this.nickname = e.detail.value
+        } else {
+          wepy.showModal({
+            title: '提示',
+            content: '你已超出字数范围...'
+          })
+        }
+      },
+      editSalary (e) {
+        this.salaryIndex = e.detail.value
+      },
+      degreeChoose (e) {
+        this.degreeIndex = e.detail.value
+      },
+      editMarriageStatus (e) {
+        this.marriageStatusIndex = e.detail.value
+      },
+      async inviteGuest () {
+        if (this.invitecode.length === 0) {
+          wepy.showModal({
+            title: '提示',
+            content: '抱歉，邀请码不能为空。',
+            showCancel: false
+          })
+        } else {
+          wepy.showToast({
+            title: '验证中...',
+            icon: 'loading',
+            duration: 10000,
+            mask: true
+          })
+          var self = this
+          console.log(typeof self.invitecode)
+          const res = await api.verifyinvite({
+            query: {
+              invitecode: self.invitecode
+            },
+            method: 'POST'
+          })
+          console.log(res)
+          wepy.hideToast()
+          if (res.data && res.data.available) {
+            wepy.showToast({
+              title: '成功',
+              icon: 'success',
+              duration: 2000
+            })
+            this.accessible = true
+            self.$apply()
+          } else {
+            wepy.showModal({
+              title: '提示',
+              content: '抱歉，邀请码无法识或者已失效，请重新输入有效邀请码。',
+              showCancel: false
+            })
+          }
+        }
+      },
+      editinvite (e) {
+        this.invitecode = e.detail.value
+      },
       bindTextAreaBlur: function(e) {
         console.log(e.detail.value)
       },

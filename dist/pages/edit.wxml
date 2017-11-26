@@ -1,139 +1,137 @@
 
-  <view class="container">
+  <view class="container zm-edit-container" style="padding: 20px;">
 
-    <view>
-      <input placeholder="输入你的邀请码..." auto-focus/>
-
-      <view>
-        <text>请自行留下一个输入指令方便下次修改资料</text>
-        <input placeholder="在这里输入..." auto-focus/>
+    <view  wx:if="{{!accessible}}">
+      <view class="zm-invite" wx:if="{{!accessible}}">
+        <text style="">请输入你的邀请码</text>
+        <input bindinput="editinvite" class="zm-input" placeholder="欢迎你..." auto-focus/>
+        <button bindtap="inviteGuest" style="" type="primary" name="button">确定</button>
       </view>
     </view>
 
-    <view>
-      <view>
-        <text>请详细填写你的资料，标记部分为必填</text>
+    <view  wx:if="{{accessible}}">
+      <view style="padding: 20px; text-align:center; display: flex; flex-direction:column; ">
+        <text style="font-size: 30px;font-weight:700;color: #c0ae7d">请详细填写资料</text>
+        <text style="font-size: 12px; color: green; opacity: 0.5;">(绿色部分为必填)</text>
       </view>
 
       <view>
         <view>
-          <text>请上传一到三张免冠照（必选）</text>
+          <text class="green">请上传一到三张免冠照</text>
           <view class="image-list">
             <!-- preview the image which already be choosed -->
-            <view class="choosed-image-list"  wx:for="{{ images }}" wx:for-item="image" wx:for-index="idx" wx:key="{{ idx }}">
+            <view class="choosed-image-list" wx:for="{{ images }}" wx:for-item="image" wx:for-index="idx" wx:key="{{ idx }}">
               <image src="{{ image }}" mode="aspectFill" catchtap="previewImage" class="choosed-image" data-wpypreviewimage-a="{{ image }}" data-wpypreviewimage-b="{{ images }}"/>
               <view class="choosed-image-delete-btn" catchtap="deleteImage" data-wpydeleteimage-a="{{ idx }}">
                 <image class="choosed-image-delete-btn-icon" src="../img/delete.svg"/>
               </view>
             </view>
             <!-- image choosing btn -->
-            <view class="choose-image-btn"  wx:if="{{ images.length < 9 }}" bindtap="chooseImage">
+            <view class="choose-image-btn" wx:if="{{ images.length < 3 }}" bindtap="chooseImage">
               <image class="choose-image-btn-icon" src="../img/choose-image.svg">
               </image>
             </view>
           </view>
         </view>
 
-        <view>
-          <text>昵称：</text>
-          <input placeholder="..."/>
+        <view style="display: flex; padding-bottom:10px;">
+          <text class="green">昵称：</text>
+          <input bindinput="editnickname" class="zm-input" placeholder="在这里认识朋友..."/>
         </view>
 
         <view>
-          <text>请做一个自我介绍: </text>
-          <textarea bindblur="bindTextAreaBlur" auto-height placeholder="自动变高"/>
+          <text style="">请做一个自我介绍: </text>
+          <textarea bindinput="editselfintro" class="zm-input" style="height: 100px;margin-top:10px;" bindblur="bindTextAreaBlur" placeholder="相遇相知..."/>
         </view>
 
-        <view>
-          <text>性别</text>
-          <radio-group class="radio-group" bindchange="radioChange">
+        <view style="padding: 10px 0;">
+          <text class="green">性别:</text>
+          <radio-group style="padding-top:10px;" bindchange="editgender">
             <label class="radio" wx:for="{{gender}}" wx:key="{{ idx }}" wx:for-index="idx">
-              <radio value="{{item}}" checked="{{item.checked}}"/>{{item.value}}
+              <radio value="{{item}}" checked="{{item.checked}}"/>{{item}}
             </label>
           </radio-group>
         </view>
 
-        <view>
-          <text>年龄</text>
-          <input placeholder="直接输入年龄..."/>
+        <view style="display: flex; padding-bottom:10px;">
+          <text class="green">年龄：</text>
+          <input class="zm-input" bindinput="editage" type="number" placeholder="找到喜欢的人..."/>
         </view>
 
-        <view>
+        <view style="padding-bottom:10px;">
           <!-- <view class="">婚姻状态</view> -->
-          <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
+          <picker bindchange="editMarriageStatus" value="{{marriageStatusIndex}}" range="{{marriageStatusRange}}">
             <view class="picker">
-              婚姻状态：{{array[index]}}
+              <text class="green">婚姻状态：</text>{{marriageStatusRange[marriageStatusIndex]}}
             </view>
           </picker>
         </view>
 
-        <view>
-          <text>身高</text>
-          <input placeholder="单位为cm..."/>
+        <view style="display: flex; padding-bottom:10px;">
+          <text class="green">身高(cm)：</text>
+          <input class="zm-input" bindinput="editheight" type="number" placeholder="一生一世..."/>
         </view>
 
-        <view>
-          <text>体重</text>
-          <input placeholder="单位为kg..."/>
+        <view style="display: flex; padding-bottom:10px;">
+          <text>体重(Kg)：</text>
+          <input class="zm-input" bindinput="editweight" type="number" placeholder="人生百年..."/>
         </view>
 
-        <view>
+        <view style="padding-bottom:10px;">
           <!-- <view class="">婚姻状态</view> -->
-          <picker bindchange="bindPickerChange" value="{{index}}" range="{{array2}}">
+          <picker style="padding-bottom:10px;" bindchange="degreeChoose" value="{{degreeIndex}}" range="{{degreeRange}}">
             <view class="picker">
-              学历{{array2[index]}}
+              <text class="green">学历：</text>{{degreeRange[degreeIndex]}}
             </view>
           </picker>
-          <view>
-            <text>海归派</text>
-            <checkbox value="{{haigui}}" checked="true"/>{{item.value}}
+          <view style="padding-bottom:10px;">
+            <text>海归派：</text>
+            <checkbox bindtap="edithaigui"/>
           </view>
-          <view>
-            <text>毕业院校</text>
-            <input placeholder="若多个可以加逗号分别列出..."/>
+          <view style="padding-bottom:10px;">
+            <text>毕业院校：</text>
+            <input class="zm-input" bindinput="editcollege" style="margin-top: 5px;" placeholder="莫不如此为最美..."/>
           </view>
-          <view>
-            <text>专业</text>
-            <input placeholder="若多个可以加逗号分别列出..."/>
+          <view style="">
+            <text>专业：</text>
+            <input class="zm-input" bindinput="editmajor" style="margin-top: 5px;" placeholder="若多个可以加逗号分别列出..."/>
           </view>
         </view>
 
-        <view>
-          <text>工作城市（只限南京）</text>
+        <view style="padding-bottom:10px;">
+          <text>工作/学习城市（只限南京）</text>
           <input placeholder="南京" disabled/>
         </view>
 
-        <view>
-          <picker bindchange="bindPickerChange" value="{{index}}" range="{{array2}}">
+        <view style="padding-bottom:10px;">
+          <picker bindchange="editSalary" value="{{salaryIndex}}" range="{{salaryRange}}">
             <view class="picker">
-              薪水{{xinshui[index]}}
+              薪水：{{salaryRange[salaryIndex]}}
             </view>
           </picker>
         </view>
 
-        <view>
-          <text>是否有房产</text>
-          <checkbox value="{{haigui}}" checked="true"/>{{item.value}}
+        <view style="display: flex; padding-bottom:10px;">
+          <text>是否有房：</text>
+          <checkbox bindtap="edityoufang"/>
         </view>
 
-        <view>
-          <text>户口</text>
-          <input placeholder="比如南京..."/>
+        <view style="display: flex; padding-bottom:10px;">
+          <text>户口：</text>
+          <input class="zm-input" bindchange="edithometown" placeholder="比如南京..."/>
         </view>
 
-        <view>
-          <text>从事行业</text>
-          <input placeholder="比如互联网..."/>
+        <view style="display: flex; padding-bottom:10px;">
+          <text>从事行业：</text>
+          <input class="zm-input" bindchange="editindustry" placeholder="比如互联网..."/>
         </view>
 
-        <view>
-          <text>公司类型</text>
-          <input placeholder="比如机关单位..."/>
+        <view style="display: flex; padding-bottom:10px;">
+          <text>公司类型：</text>
+          <input class="zm-input" bindchange="editcompanytype" placeholder="比如机关单位..."/>
         </view>
 
     </view>
-
+      <button style="margin: 10px 0;" bindtap="send" type="primary" name="button">确定上传</button>
     </view>
-
-    <button type="button" name="button">确定上传</button>
   </view>
