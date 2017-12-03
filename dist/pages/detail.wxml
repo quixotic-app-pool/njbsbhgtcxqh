@@ -1,11 +1,11 @@
 
-  <view class="container heartbeating" style="height: {{sysHeight}}px;">
+  <view class="container heartbeating">
     <view class="zm-detail-container">
       <view style="width: 100%;border-radius: 10px 10px 0 0;">
-        <swiper vertical="true" indicator-active-color="rgb(250, 150, 161)" circular="true" indicator-dots="false" autoplay="true" interval="10000" duration="1000">
-          <block  wx:for="{{box.imgUrls}}" wx:key="index" wx:for-index="index">
-            <swiper-item>
-              <image bindtap="previewImage" src="{{item}}" style="width: {{sysWidth}}px;" mode="aspectFit" data-wpypreviewimage-a="{{box.imgUrls[index]}}" data-wpypreviewimage-b="{{box.imgUrls}}"/>
+        <swiper style="height: 320px;" vertical="true" indicator-active-color="rgb(250, 150, 161)" circular="true" indicator-dots="false" autoplay="true" interval="10000" duration="1000">
+          <block  wx:for="{{box.imgurls}}" wx:key="index" wx:for-index="index" wx:for-item="item">
+            <swiper-item style="width: 100%;">
+              <image bindtap="previewImage" src="{{item.url}}" style="border-radius:10px; height: {{item.height / item.width * sysWidth * 0.9}}px; width: 100%" data-wpypreviewimage-a="{{index}}" data-wpypreviewimage-b="{{box.imgurls}}"/>
             </swiper-item>
           </block>
         </swiper>
@@ -20,14 +20,14 @@
         </view>
       </view>
 
-      <view  wx:if="{{ box.seflintro !== undefined && box.seflintro.length !== 0}}" class="column_center" style="padding: 0 10px;border-bottom:1px solid #eee;">
+      <view  wx:if="{{ box.selfintro !== undefined && box.selfintro.length !== 0}}" class="column_center" style="padding: 0 10px;border-bottom:1px solid #eee;">
         <text style="align-self: flex-start;font-weight:700;top:16px;position:relative;font-size:22px;">自我介绍: </text>
         <text style="text-align: justify; line-height:24px; padding-bottom: 20px;font-size:17px;opacity: 0.5">
-          {{box.seflintro}}
+          {{box.selfintro}}
         </text>
       </view>
 
-      <view style="padding:44px; display:flex; flex-direction:row; flex-wrap: wrap;border-radius:0 0 10px 10px;">
+      <view style="padding:44px; display:flex; flex-direction:row; flex-wrap: wrap;border-radius:0 0 10px 10px;justify-content:center;">
         <text class="zm-text" style="background-color: #00fa9a">{{box.marriagestatus}}</text>
         <text class="zm-text" style="background-color: #ff0000">{{box.height}} cm</text>
         <text wx:if="{{ box.weight !== undefined && box.weight.length !== 0}}" class="zm-text" style="background-color:#ffd700">{{box.weight}}Kg</text>

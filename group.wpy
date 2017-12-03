@@ -28,7 +28,7 @@
     methods = {
       tap () {
         this.grouplist.name = `Parent Random(${Math.random()})`
-        console.log(`Clicked Group ${this.$index}, ID is ${this.grouplist.id}`)
+        // console.log(`Clicked Group ${this.$index}, ID is ${this.grouplist.id}`)
       }
     }
   }

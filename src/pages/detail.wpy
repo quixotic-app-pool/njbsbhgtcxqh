@@ -1,7 +1,7 @@
 <style lang="less">
   .zm-detail-container {
     margin: 10px;
-    height: 100%;
+    width: 90%;
     box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
     border: 1px solid #e6ebf5;
     border-radius: 10px;
@@ -47,13 +47,13 @@
   }
 </style>
 <template>
-  <view class="container heartbeating" style="height: {{sysHeight}}px;">
+  <view class="container heartbeating">
     <view class="zm-detail-container">
       <view style="width: 100%;border-radius: 10px 10px 0 0;">
-        <swiper vertical="true" indicator-active-color="rgb(250, 150, 161)" circular="true" indicator-dots="false" autoplay="true" interval="10000" duration="1000">
-          <block wx:for="{{box.imgUrls}}" wx:key="index" wx:for-index="index">
-            <swiper-item>
-              <image bindtap="previewImage({{box.imgUrls[index]}}, {{box.imgUrls}})" src="{{item}}" style="width: {{sysWidth}}px;" mode="aspectFit"/>
+        <swiper style="height: 320px;" vertical="true" indicator-active-color="rgb(250, 150, 161)" circular="true" indicator-dots="false" autoplay="true" interval="10000" duration="1000">
+          <block wx:for="{{box.imgurls}}" wx:key="index" wx:for-index="index" wx:for-item="item">
+            <swiper-item style="width: 100%;">
+              <image bindtap="previewImage({{index}}, {{box.imgurls}})" src="{{item.url}}" style="border-radius:10px; height: {{item.height / item.width * sysWidth * 0.9}}px; width: 100%" />
             </swiper-item>
           </block>
         </swiper>
@@ -68,14 +68,14 @@
         </view>
       </view>
 
-      <view wx:if="{{ box.seflintro !== undefined && box.seflintro.length !== 0}}" class="column_center" style="padding: 0 10px;border-bottom:1px solid #eee;">
+      <view wx:if="{{ box.selfintro !== undefined && box.selfintro.length !== 0}}" class="column_center" style="padding: 0 10px;border-bottom:1px solid #eee;">
         <text style="align-self: flex-start;font-weight:700;top:16px;position:relative;font-size:22px;">自我介绍: </text>
         <text style="text-align: justify; line-height:24px; padding-bottom: 20px;font-size:17px;opacity: 0.5">
-          {{box.seflintro}}
+          {{box.selfintro}}
         </text>
       </view>
 
-      <view style="padding:44px; display:flex; flex-direction:row; flex-wrap: wrap;border-radius:0 0 10px 10px;">
+      <view style="padding:44px; display:flex; flex-direction:row; flex-wrap: wrap;border-radius:0 0 10px 10px;justify-content:center;">
         <text class="zm-text" style="background-color: #00fa9a">{{box.marriagestatus}}</text>
         <text class="zm-text" style="background-color: #ff0000">{{box.height}} cm</text>
         <text wx:if="{{ box.weight !== undefined && box.weight.length !== 0}}" class="zm-text" style="background-color:#ffd700">{{box.weight}}Kg</text>
@@ -107,15 +107,16 @@
       box: {}
     };
     async onLoad (option) {
-      console.log(option)
+      // console.log(option)
       var res = await api.getdetail({
         query: {
           _id: option._id
         }
       })
-      console.log('detail back:' + JSON.stringify(res));
+      // console.log('detail back:' + JSON.stringify(res))
       if (res.data) {
         this.box = res.data
+        // console.log('this.box: ' + JSON.stringify(this.box))
         this.$apply()
       } else {
         wepy.showModal({
@@ -141,11 +142,12 @@
     };
     methods = {
       previewImage (cur, imgList) {
-        console.log(cur)
-        console.log(imgList)
+        var imgArrays = imgList.map(function(item) {
+          return item.url
+        })
         wepy.previewImage({
-          current: cur,
-          urls: imgList
+          current: cur.url,
+          urls: imgArrays
         })
       }
     }

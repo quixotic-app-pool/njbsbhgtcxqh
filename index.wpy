@@ -173,14 +173,14 @@
         })
 
         promise.then((d) => {
-          console.log('toast done')
+          // console.log('toast done')
         })
       },
       tap () {
-        console.log('do noting from ' + this.$name)
+        // console.log('do noting from ' + this.$name)
       },
       communicate () {
-        console.log(this.$name + ' tap')
+        // console.log(this.$name + ' tap')
 
         this.$invoke('counter2', 'minus', 45, 6)
         this.$invoke('counter1', 'plus', 45, 6)
@@ -203,14 +203,14 @@
       },
       counterEmit (...args) {
         let $event = args[args.length - 1]
-        console.log(`${this.$name} receive ${$event.name} from ${$event.source.$name}`)
+        // console.log(`${this.$name} receive ${$event.name} from ${$event.source.$name}`)
       }
     }
 
     events = {
       'index-emit': (...args) => {
         let $event = args[args.length - 1]
-        console.log(`${this.$name} receive ${$event.name} from ${$event.source.$name}`)
+        // console.log(`${this.$name} receive ${$event.name} from ${$event.source.$name}`)
       }
     }
 

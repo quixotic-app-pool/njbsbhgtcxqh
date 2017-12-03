@@ -5,15 +5,15 @@
  * @Project: one_server
  * @Filename: api.js
  * @Last modified by:   mymac
- * @Last modified time: 2017-11-26T15:41:44+08:00
+ * @Last modified time: 2017-12-03T10:24:07+08:00
  */
  import {
    wxRequest
  } from '../utils/wxRequest';
 
  // let env = "-test" //-dev 或者 -test
- const host = 'http://127.0.0.1:9000'
- // const host = 'https://www.takeiteasydude.com'
+ // const host = 'http://127.0.0.1:9000'
+ const host = 'https://www.takeiteasydude.com'
 
  const verifyinvite = (params) => wxRequest(params, host + "/api/verifyinvite");
  const newportfolio = (params) => wxRequest(params, host + "/api/newportfolio");

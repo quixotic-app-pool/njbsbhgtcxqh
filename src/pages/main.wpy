@@ -68,7 +68,7 @@
     <view wx:if="!uploaded" bindtap="goEdit" class="floatingBtn secondBtn"><text>上传</text></view>
     <scroll-view scroll-y class="heartbeating " style="background-color: rgb(240, 240, 240); height: {{sysHeight}}px; width: 100%;" bindscrolltoupper="upper" bindscrolltolower="lower" bindscroll="scroll" scroll-into-view="{{toView}}" enable-back-to-top='true' scroll-top="{{scrollTop}}">
       <view bindtap="navigateToDetail({{item._id}})" class="zm-main-item" wx:for="{{list}}" wx:key="{{ idx }}" wx:for-index="idx" wx:for-item="item">
-        <image style="flex:1; width: 100%;padding:10px;box-sizing:border-box;" mode="aspectFill" src="/Users/mymac/Desktop/miniprogram/backend/njbsbhgtcdsxqh_server/route/../imageuploaded/1511688530438.jpg"></image>
+        <image style="flex:1; width: 100%;padding:10px;box-sizing:border-box;" mode="aspectFill" src="{{item.imgurls[0].url}}"></image>
         <view style="border-radius:0 300px 300px 0;flex:1; display:flex; flex-direction:column; justify-content:center; padding: 10px; flex-wrap: wrap">
           <view >
               <view class="navigating">
@@ -115,7 +115,7 @@
       list: []
     };
     async onLoad () {
-      this.uploaded = wepy.getStorageSync('_uploaded')
+      // this.uploaded = wepy.getStorageSync('_uploaded')
       var genderPreference = wepy.getStorageSync('_genderPreference')
       if (genderPreference === '女生') {
         this.filterStatus = '男生'
@@ -133,7 +133,7 @@
           page: self.page
         }
       })
-      // console.log('request list get result from server: ' + JSON.stringify(res))
+      // // console.log('request list get result from server: ' + JSON.stringify(res))
       if (res.data) {
         self.page ++
         if (self.list.length === 0) {
@@ -141,6 +141,7 @@
         } else {
           self.list.push(...res.data)
         }
+        // // console.log('list: ' + JSON.stringify(self.list));
         self.$apply()
       } else {
         wepy.showModal({
@@ -175,14 +176,14 @@
 
       },
       upper (e) {
-        // console.log(e)
+        // // console.log(e)
       },
       async lower () {
         var genderPreference = wepy.getStorageSync('_genderPreference')
         await this.requestList(genderPreference)
       },
       scroll (e) {
-        // console.log(e)
+        // // console.log(e)
       },
       goEdit () {
         wepy.navigateTo({

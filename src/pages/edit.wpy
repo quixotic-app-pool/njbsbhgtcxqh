@@ -247,7 +247,7 @@
       degreeIndex: 0,
       salaryIndex: 0,
       genderValue: '',
-      accessible: true,
+      accessible: false,
       selfintro: '',
       age: 0,
       height: 0,
@@ -277,24 +277,26 @@
             content: '确定上传吗？只此一次上传机会额，因为群主有点忙，暂时没有修改的功能的呢。修改暂时只能找泽铭从后台完成😜。'
           }).then(async function (res) {
             if (res.confirm) {
-              console.log(self)
+              // // console.log(self)
                 // imgUrls: []
 
               var imgUrls = []
                 // upload images
               if (self.images.length > 0) {
                 try {
+                  // console.log('self.images: ' + self.images)
                   for (let v of self.images) {
                     const r = await wepy.uploadFile({
-                      url: 'http://127.0.0.1:9000/api/upload/image',
+                      url: 'https://www.takeiteasydude.com/api/upload/image',
                       filePath: v,
                       name: 'file',
                       success: function(res) {
-                        console.log('image has been successfully saved in server. Congrats!')
+                        // console.log('image has been successfully saved in server. Congrats!')
                       }
                     })
 
                     r.data = JSON.parse(r.data)
+                    // console.log('r.data: ' + r.data)
                     if (r.data.img) {
                       imgUrls.push(r.data.img)
                     } else {
@@ -347,7 +349,7 @@
                   },
                   method: 'POST'
                 })
-                // console.log('data back from new blog: ' + JSON.stringify(res))
+                // // console.log('data back from new blog: ' + JSON.stringify(res))
                 wepy.hideToast()
                 if (res.data.success) {
                   await wepy.showToast({
@@ -356,7 +358,7 @@
                     duration: 1500,
                     mask: true
                   })
-                  wepy.setStorageSync('_uploaded', true)
+                  // wepy.setStorageSync('_uploaded', true)
                 } else {
                   wepy.showModal({
                     title: '提示',
@@ -466,7 +468,7 @@
         }
       },
       editselfintro (e) {
-        if (e.detail.value.length < 120) {
+        if (e.detail.value.length < 1000) {
           this.selfintro = e.detail.value
         } else {
           wepy.showModal({
@@ -509,14 +511,14 @@
             mask: true
           })
           var self = this
-          console.log(typeof self.invitecode)
+          // console.log(typeof self.invitecode)
           const res = await api.verifyinvite({
             query: {
               invitecode: self.invitecode
             },
             method: 'POST'
           })
-          console.log(res)
+          // console.log(res)
           wepy.hideToast()
           if (res.data && res.data.available) {
             wepy.showToast({
@@ -539,7 +541,7 @@
         this.invitecode = e.detail.value
       },
       bindTextAreaBlur: function(e) {
-        console.log(e.detail.value)
+        // console.log(e.detail.value)
       },
       async chooseImage () {
         const { tempFilePaths } = await wepy.chooseImage({
